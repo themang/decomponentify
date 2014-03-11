@@ -35,8 +35,14 @@ module.exports = function (file) {
         /^require\.aliases \=/m.test(data) &&
         /^require\.resolve \=/m.test(data)) {
       output = falafel(data, function (node) {
-        if (node.parent && node.parent.type === 'CallExpression' && node.type === 'Identifier' && node.name === 'require') {
-          node.update('_require');
+        if (node.type === 'Identifier' && node.name === 'require') {
+          var parent = node.parent;
+
+          if (parent.type === 'CallExpression' || 
+            parent.type === 'MemberExpression' || 
+            parent.type === 'FunctionExpression' ||
+            parent.type === 'FunctionDeclaration')
+            node.update('_require');
         }
       });
       output += 'module.exports = _require;';
