@@ -35,7 +35,7 @@ module.exports = function (file) {
         /^require\.aliases \=/m.test(data) &&
         /^require\.resolve \=/m.test(data)) {
       output = falafel(data, function (node) {
-        if (node.parent.type === 'CallExpression' && node.type === 'Identifier' && node.name === 'require') {
+        if (node.parent && node.parent.type === 'CallExpression' && node.type === 'Identifier' && node.name === 'require') {
           node.update('_require');
         }
       });
